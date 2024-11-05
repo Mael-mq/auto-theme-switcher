@@ -1,73 +1,101 @@
 {
-  "name": "auto-theme-switcher",
-  "displayName": "AutoThemeSwitcher",
-  "description": "Automatically switch between given dark and light theme based on your time zone.",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.95.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "autoThemeSwitcher.configure",
-        "title": "Configure AutoThemeSwitcher"
-      }
+    "name": "auto-theme-switcher",
+    "displayName": "AutoThemeSwitcher",
+    "description": "Automatically switch between given dark and light theme based on your time zone.",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.95.0"
+    },
+    "categories": [
+        "Other"
     ],
-    "configuration": {
-      "type": "object",
-      "title": "AutoThemeSwitcher",
-      "properties": {
-        "autoThemeSwitcher.timezone": {
-          "type": "string",
-          "default": "UTC",
-          "description": "Timezone to determine sunrise and sunset."
-        },
-        "autoThemeSwitcher.lightTheme": {
-          "type": "string",
-          "default": "",
-          "description": "The light theme to switch to during the day."
-        },
-        "autoThemeSwitcher.darkTheme": {
-          "type": "string",
-          "default": "",
-          "description": "The dark theme to switch to during the night."
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "autoThemeSwitcher.configure",
+                "title": "Configure AutoThemeSwitcher"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "AutoThemeSwitcher",
+            "properties": {
+                "autoThemeSwitcher.timezone": {
+                    "type": "string",
+                    "default": "(UTC) London",
+                    "enum": [
+                        "(UTC−12) Baker Island",
+                        "(UTC−11) American Samoa",
+                        "(UTC−10) Honolulu",
+                        "(UTC−9) Anchorage",
+                        "(UTC−8) Los Angeles",
+                        "(UTC−7) Denver",
+                        "(UTC−6) Mexico City",
+                        "(UTC−5) New York",
+                        "(UTC−4) Santiago",
+                        "(UTC−3) Buenos Aires",
+                        "(UTC−2) South Georgia",
+                        "(UTC−1) Azores",
+                        "(UTC) London",
+                        "(UTC+1) Paris",
+                        "(UTC+2) Cairo",
+                        "(UTC+3) Moscow",
+                        "(UTC+4) Dubai",
+                        "(UTC+5) Karachi",
+                        "(UTC+5:30) New Delhi",
+                        "(UTC+6) Dhaka",
+                        "(UTC+7) Bangkok",
+                        "(UTC+8) Beijing",
+                        "(UTC+9) Tokyo",
+                        "(UTC+10) Sydney",
+                        "(UTC+11) Noumea",
+                        "(UTC+12) Auckland"
+                    ],
+                    "description": "Select your timezone based on city for sunrise and sunset calculations."
+                },
+                "autoThemeSwitcher.lightTheme": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The light theme to switch to during the day."
+                },
+                "autoThemeSwitcher.darkTheme": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The dark theme to switch to during the night."
+                }
+            }
         }
-      }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run package",
+        "compile": "webpack",
+        "watch": "webpack --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "compile-tests": "tsc -p . --outDir out",
+        "watch-tests": "tsc -p . -w --outDir out",
+        "pretest": "npm run compile-tests && npm run compile && npm run lint",
+        "lint": "eslint src",
+        "test": "vscode-test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.9",
+        "@types/node": "20.x",
+        "@types/vscode": "^1.95.0",
+        "@typescript-eslint/eslint-plugin": "^8.10.0",
+        "@typescript-eslint/parser": "^8.7.0",
+        "@vscode/test-cli": "^0.0.10",
+        "@vscode/test-electron": "^2.4.1",
+        "eslint": "^9.13.0",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.6.3",
+        "webpack": "^5.95.0",
+        "webpack-cli": "^5.1.4"
+    },
+    "dependencies": {
+        "suncalc": "^1.9.0"
     }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@types/mocha": "^10.0.9",
-    "@types/node": "20.x",
-    "@types/vscode": "^1.95.0",
-    "@typescript-eslint/eslint-plugin": "^8.10.0",
-    "@typescript-eslint/parser": "^8.7.0",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1",
-    "eslint": "^9.13.0",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.6.3",
-    "webpack": "^5.95.0",
-    "webpack-cli": "^5.1.4"
-  },
-  "dependencies": {
-    "suncalc": "^1.9.0"
-  }
 }
