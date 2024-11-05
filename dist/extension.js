@@ -56,19 +56,24 @@ async function configureSettings() {
     // Récupère uniquement les extensions qui sont des thèmes
     const themeExtensions = vscode.extensions.all.filter(extension => extension.packageJSON.contributes && extension.packageJSON.contributes.themes);
     // Extraire les noms des thèmes sombres et clairs
-    const themeNames = themeExtensions.flatMap(extension => extension.packageJSON.contributes.themes.map((theme) => theme.label));
+    const themeChoices = themeExtensions.flatMap(extension => extension.packageJSON.contributes.themes.map((theme) => ({
+        label: theme.label,
+        value: theme.id
+    })));
     // Sélection du thème clair
-    const lightTheme = await vscode.window.showQuickPick(themeNames, {
+    const lightThemeChoice = await vscode.window.showQuickPick(themeChoices.map(theme => theme.label), {
         placeHolder: 'Select your light theme',
     });
+    const lightTheme = themeChoices.find(theme => theme.label === lightThemeChoice)?.value;
     if (!lightTheme) {
         return;
     }
     ;
     // Sélection du thème sombre
-    const darkTheme = await vscode.window.showQuickPick(themeNames, {
+    const darkThemeChoice = await vscode.window.showQuickPick(themeChoices.map(theme => theme.label), {
         placeHolder: 'Select your dark theme',
     });
+    const darkTheme = themeChoices.find(theme => theme.label === darkThemeChoice)?.value;
     if (!darkTheme) {
         return;
     }
@@ -77,7 +82,7 @@ async function configureSettings() {
     vscode.workspace.getConfiguration().update('autoThemeSwitcher.timezone', timezone, true);
     vscode.workspace.getConfiguration().update('autoThemeSwitcher.lightTheme', lightTheme, true);
     vscode.workspace.getConfiguration().update('autoThemeSwitcher.darkTheme', darkTheme, true);
-    checkAndSwitchTheme();
+    forceCheckAndSwitchTheme(lightTheme, darkTheme);
 }
 function checkAndSwitchTheme() {
     console.log('Cheking theme');
@@ -92,12 +97,36 @@ function checkAndSwitchTheme() {
     const now = new Date();
     const times = SunCalc.getTimes(now, 48.8566, 2.3522); // Coordonnées pour l'exemple, Paris
     const isDay = now > times.sunrise && now < times.sunset;
-    if (isDay /* && currentTheme !== 'light' */) {
+    if (isDay && currentTheme !== 'light') {
+        console.log('Switching to light theme');
         vscode.workspace.getConfiguration().update('workbench.colorTheme', lightTheme, vscode.ConfigurationTarget.Global);
-        console.log(lightTheme);
         currentTheme = 'light';
     }
-    else if (!isDay /* && currentTheme !== 'dark' */) {
+    else if (!isDay && currentTheme !== 'dark') {
+        console.log('Switching to dark theme');
+        vscode.workspace.getConfiguration().update('workbench.colorTheme', darkTheme, vscode.ConfigurationTarget.Global);
+        currentTheme = 'dark';
+    }
+}
+function forceCheckAndSwitchTheme(lightTheme, darkTheme) {
+    console.log('Forcing theme');
+    const config = vscode.workspace.getConfiguration('autoThemeSwitcher');
+    const timezone = config.get('timezone');
+    if (!timezone || !lightTheme || !darkTheme) {
+        return;
+    }
+    ;
+    const now = new Date();
+    const times = SunCalc.getTimes(now, 48.8566, 2.3522); // Coordonnées pour l'exemple, Paris
+    const isDay = now > times.sunrise && now < times.sunset;
+    if (isDay) {
+        console.log('Force switching to light theme');
+        console.log(lightTheme);
+        vscode.workspace.getConfiguration().update('workbench.colorTheme', lightTheme, vscode.ConfigurationTarget.Global);
+        currentTheme = 'light';
+    }
+    else if (!isDay) {
+        console.log('Force switching to dark theme');
         vscode.workspace.getConfiguration().update('workbench.colorTheme', darkTheme, vscode.ConfigurationTarget.Global);
         currentTheme = 'dark';
     }
