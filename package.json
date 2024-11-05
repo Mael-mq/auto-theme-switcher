@@ -17,7 +17,8 @@
         "commands": [
             {
                 "command": "autoThemeSwitcher.configure",
-                "title": "Configure AutoThemeSwitcher"
+                "title": "Configure AutoThemeSwitcher",
+                "category": "AutoThemeSwitcher"
             }
         ],
         "configuration": {
@@ -60,12 +61,12 @@
                 "autoThemeSwitcher.lightTheme": {
                     "type": "string",
                     "default": "",
-                    "description": "The light theme to switch to during the day."
+                    "description": "The light theme to switch to during the day. You can configure it by running the AutoThemeSwitcher: Configure command."
                 },
                 "autoThemeSwitcher.darkTheme": {
                     "type": "string",
                     "default": "",
-                    "description": "The dark theme to switch to during the night."
+                    "description": "The dark theme to switch to during the night. You can configure it by running the AutoThemeSwitcher: Configure command."
                 }
             }
         }
