@@ -6,6 +6,8 @@ Automatically switch between given dark and light theme based on your time zone
 
 Simply run the autoThemeSwitcher.configure command to configure the extension.
 
+![configure gif](https://github.com/Mael-mq/auto-theme-switcher/tuto-gif/configure.gif)
+
 ## Features
 
 This extension lets you
